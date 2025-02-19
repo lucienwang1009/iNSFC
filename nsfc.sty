@@ -1,37 +1,54 @@
 \usepackage[english]{babel} %支持混合语言
-\usepackage{xcolor}
-\usepackage{geometry} %改改尺寸
-\usepackage{enumitem}
-\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{xeCJK}
+\usepackage{xeCJKfntef}
+\usepackage{amsmath}
+\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
+\usepackage{complexity}
+\usepackage{pifont}
+\usepackage{graphicx}
 \usepackage{caption}
-\usepackage{gbt7714}
+\usepackage{subcaption}
+\usepackage{ulem}
+% \usepackage{CJKulem}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{wasysym}
+% \usepackage[unicode]{hyperref} %提供跳转链接
+\usepackage{geometry} %改改尺寸
+\usepackage{amsfonts}
+\newcommand{\todo}[1]{{\textcolor{red}{#1}}} % red
+\newcommand{\implus}[1]{{\textcolor{cyan}{#1}}}
+\usepackage[numbers,sort&compress]{natbib}
+\setlength{\bibsep}{0.0ex} % 缩小参考文献间的垂直间距
+\usepackage{float}
+\usepackage{tikz}
+\newcommand*{\PICSIZE}{8}
+\usepackage{dsfont}
+\usepackage[noabbrev,nameinlink]{cleveref}
 
-%调整参考文献标题格式和上下文间隔。
-\bibliographystyle{gbt7714-numerical}
-\setlength{\bibsep}{0.0pt}
-\renewcommand\bibsection{\vspace{-6ex}\section*{\refname}\vspace{-11ex}}
 
-% \geometry{left=3.23cm,right=3.23cm,top=2.54cm,bottom=2.54cm}
+%\geometry{left=3.23cm,right=3.23cm,top=2.54cm,bottom=2.54cm}
 %latex的页边距比word的视觉效果要大一些，稍微调整一下
 %\geometry{left=2.95cm,right=2.95cm,top=2.54cm,bottom=2.54cm}%2020
+%\geometry{left=2.95cm,right=2.95cm,top=2.54cm,bottom=2.54cm}
 \geometry{left=3.00cm,right=3.07cm,top=2.67cm,bottom=3.27cm}
 \pagestyle{empty}
 \setcounter{secnumdepth}{-2} %不让那些section和subsection自带标号，标号格式自己掌握
-\titlespacing{\subsubsection}{2em}{1ex}{1ex} %设置小节标题前后文字间距。
-
 \definecolor{MsBlue}{RGB}{0,112,192} %Ms Word 的蓝色和latex xcolor包预定义的蓝色不一样。通过屏幕取色得到。
+\definecolor{BoldBlue}{RGB}{0,0,64} % Color(0, 0, 64)
 % Renaming floats with babel
 \addto\captionsenglish{
-	\renewcommand{\contentsname}{目录}
-	\renewcommand{\listfigurename}{插图目录}
-	\renewcommand{\listtablename}{表格}
-	% \renewcommand{\refname}{\sihao 参考文献}
-	\renewcommand{\refname}{\sihao \kaishu \leftline{参考文献}} %这几个字默认字号稍大，改成四号字，楷书，居左(默认居中) 根据喜好自行修改，官方模板未作要求
-	\renewcommand{\abstractname}{摘要}
-	\renewcommand{\indexname}{索引}
-	\renewcommand{\tablename}{表}
-	\renewcommand{\figurename}{图}
-} %把Figure改成‘图’，reference改成‘参考文献’。如此处理是为了避免和babel包冲突。
+    \renewcommand{\contentsname}{目录}
+    \renewcommand{\listfigurename}{插图目录}
+    \renewcommand{\listtablename}{表格}
+    % \renewcommand{\refname}{\sihao \kaishu 参考文献}
+    \renewcommand{\refname}{\sihao \kaishu \leftline{参考文献}} %这几个字默认字号稍大，改成四号字，楷书，居左(默认居中) 根据喜好自行修改，官方模板未作要求
+    \renewcommand{\abstractname}{摘要}
+    \renewcommand{\indexname}{索引}
+    \renewcommand{\tablename}{表}
+    \renewcommand{\figurename}{\kaishu 图}
+    } %把Figure改成‘图’，reference改成‘参考文献’。如此处理是为了避免和babel包冲突。
 %定义字号
 \newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
 \newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
@@ -39,27 +56,113 @@
 \newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}
 \newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
 \newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont}
-% \newcommand{\sihao}{\fontsize{14.05pt}{\baselineskip}\selectfont}
 \newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
 \newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
 \newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
 \newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
 \newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
+%字号对照表
+%二号 21pt
+%四号 14
+%小四 12
+%五号 10.5
+\let\songti\relax
+\let\heiti\relax
+\newcommand\mac@word@font@dir{%
+  /Applications/Microsoft Word.app/Contents/Resources/DFonts%
+}
+\IfFileExists{\mac@word@font@dir/Kaiti.ttf}{
+  \setCJKmainfont{SimSun}[%
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttc,
+    AutoFakeBold = 3,
+    ItalicFont   = Kaiti,
+    ItalicFeatures = {Extension = .ttf},
+  ]%
+  \setCJKmonofont{Fangsong}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+  \setCJKfamilyfont{zhkai}{Kaiti}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+  \setCJKfamilyfont{zhfs}{Fangsong}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+}{
+  \setCJKmainfont{SimSun}[%
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttc,
+    AutoFakeBold = 3,
+    ItalicFont   = Simkai,
+    ItalicFeatures = {Extension = .ttf},
+  ]%
+  \setCJKmonofont{Simfang}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+  \setCJKfamilyfont{zhkai}{Simkai}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+  \setCJKfamilyfont{zhfs}{Simfang}[
+    Path         = \mac@word@font@dir/,
+    Extension    = .ttf,
+  ]%
+}
+\setCJKsansfont{SimHei}[%
+  Path         = \mac@word@font@dir/,
+  Extension    = .ttf,
+  AutoFakeBold = 3,
+]%
+\setCJKfamilyfont{zhsong}{SimSun}[%
+  Path         = \mac@word@font@dir/,
+  Extension    = .ttc,
+  AutoFakeBold = 3,
+]%
+\setCJKfamilyfont{zhhei}{SimHei}[%
+  Path         = \mac@word@font@dir/,
+  Extension    = .ttf,
+  AutoFakeBold = 3,
+]
+\newcommand{\songti}{\CJKfamily{songti}}
+\newcommand{\heiti}{\CJKfamily{zhhei}}
+\newcommand{\xingkai}{\CJKfamily{zhkai}}
+\newcommand{\kaiti}{\CJKfamily{zhkai}}
+\renewcommand{\emph}[1]{\textbf{\kaiti #1}}
 %解决阿拉伯数字字体问题
-\newfontfamily\kaitichar{KaiTi}[AutoFakeBold] %定义楷体英文和数字。
-\NewDocumentCommand \templatefont   { } { \kaishu \kaitichar } %使用模板字体代替直接使用楷书。
-\setmainfont{Times New Roman}
+% \NewDocumentCommand \templatefont   { } { \kaishu \kaitichar } %使用模板字体代替直接使用楷书。
+\setmainfont{times}[
+  Path           = \mac@word@font@dir/,
+  Extension      = .ttf,
+  BoldFont       = *bd ,
+  ItalicFont     = *i ,
+  BoldItalicFont = *bi
+]
+
 %去除item的行间隔
 \setlist{nosep}
+% \allowdisplaybreaks
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+{.4ex \@plus1ex \@minus.2ex}%
+{.4em}%
+{\normalfont\normalsize\bfseries}}
+\makeatother
+% 减少公式前后的间距
+\expandafter\def\expandafter\normalsize\expandafter{%
+    \normalsize%
+    \setlength\abovedisplayskip{5pt}%
+    \setlength\belowdisplayskip{5pt}%
+    \setlength\abovedisplayshortskip{2pt}%
+    \setlength\belowdisplayshortskip{7pt}%
+}
 %使用中文字符宽度作为边界计算依据定位列表项的格式。
 \newlength{\zhcharwidth}
 \settowidth{\zhcharwidth}{\xiaosihao 中}
-%使用实心圆点作为列表项的label
-\setlist[itemize,1]{label=\Large$\bullet$,leftmargin=3.5\zhcharwidth}
-\setlist[enumerate]{leftmargin=0em, itemindent=3.5\zhcharwidth, listparindent=\parindent, parsep=0pt, partopsep=0pt}
-\setlist[enumerate,1]{label=\arabic*),}
-\setlist[description]{leftmargin=0em, itemindent=2\zhcharwidth}
 
 %设置题注的前后间隔。
 \captionsetup{belowskip=-1.5em, aboveskip=1ex}
@@ -73,75 +176,189 @@
 \renewcommand{\baselinestretch}{1.5}
 \XeTeXlinebreaklocale "zh"           % 中文断行
 
-\newcommand{\makehead}{
-	\begin{quotation}
-		\centering{ \sanhao \templatefont \bfseries 报告正文}
-	\end{quotation}
-	\vskip -1.02mm
-	
-	{\sihao \templatefont 参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。{\color{MsBlue} \bfseries 请勿删除或改动下述提纲标题及括号中的文字。}}
+
+%%%%%%%%%% title %%%%%%%%%%
+
+% 章节标题
+\ctexset{
+  section = {
+    format = \sihao\bf\kaiti,
+    indent = 29pt,
+    beforeskip = 12bp,
+    afterskip  = 6bp,
+  }
+}
+\renewcommand{\subsection}[1]{\vspace{6bp}\noindent{\sihao\bf #1}}
+\renewcommand{\subsubsection}[1]{\noindent{\xiaosihao\bf #1}}
+\newcommand{\subsubsubsection}[1]{{\xiaosihao\bf #1}}
+
+% 图表标题
+%使图表的标号与章节无关
+% \captionsetup[figure]{format=myfigure,labelsep=space}
+\captionsetup[figure]{font={normalfont},labelsep=space,name={图}}
+% \captionsetup[table]{font={normalfont},labelsep=space,name={表}}
+% \captionsetup[lstlisting]{font={normalfont},labelsep=space,name={列表}}
+
+%%%%%%%%%%%%%%%% 参考文献 %%%%%%%%%%%%%%%%
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+\newcommand{\cncite}[1]{{文献~\cite{#1}}}
+% \newtheorem{cproblem}{组合问题}
+\newcommand{\cncitet}[1]{{\citeauthor{#1}\upcite{#1}}}
+
+%%%%%%%%%% space %%%%%%%%%%
+% 其他间距
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}      % 图形之间或图形与正文之间的距离
+\setlength{\textfloatsep}{5pt plus 2pt minus 2pt}   % 页面顶部或底部有图形时，图形与正文之间的距离
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}      % 图形与上下文之间的距离
+\setlength{\abovecaptionskip}{3pt plus 0pt minus 0pt} % 图形中的图与标题之间的距离
+\setlength{\belowcaptionskip}{3pt plus 0pt minus 0pt} % 表格中的表与标题之间的距离
+
+%%%%%%%%%% list %%%%%%%%%%
+% 列表
+
+%使用实心圆点作为列表项的label
+\setlist[itemize,1]{label=\large$\bullet$,leftmargin=2\zhcharwidth}
+\setlist[enumerate]{leftmargin=0em, itemindent=2\zhcharwidth, listparindent=\parindent, parsep=0pt, partopsep=0pt}
+\setlist[enumerate,1]{label=\arabic*),}
+\setlist[description]{leftmargin=0em, itemindent=2\zhcharwidth}
+\setlist{noitemsep}
+\setlist{
+    topsep=0pt,
+    itemsep=0pt,
+    partopsep=0pt,
+    parsep=\parskip,
 }
 
-\newcommand{\makebasis}{
-	\vskip -5mm
-	{\color{MsBlue} \subsection{\sihao \templatefont \quad （一）立项依据与研究内容(建议8000字以下)： }}
-	
-	{\sihao \templatefont \color{MsBlue} 1．{\bfseries 项目的立项依据}（研究意义、国内外研究现状及发展动态分析，需结合科学研究发展趋势来论述科学意义；或结合国民经济和社会发展中迫切需要解决的关键科技问题来论述其应用前景。附主要参考文献目录）；}
-	\vskip 2mm
-}
 
-\newcommand{\makecontent}{
-	\newpage
-	
-	{\sihao \color{MsBlue} \templatefont 2．{\bfseries 项目的研究内容、研究目标，以及拟解决的关键科学问题}（此部分为重点阐述内容）；}
-}
 
-\newcommand{\makeproposal}{
-	{\sihao \color{MsBlue} \templatefont 3．{\bfseries 拟采取的研究方案及可行性分析} （包括研究方法、技术路线、实验手段、关键技术等说明）；}
-}
+%%%%%%%%%% theorem %%%%%%%%%%
+% 定理
 
-\newcommand{\makeinnovation}{
-	{\sihao \color{MsBlue} \templatefont 4．{\bfseries 本项目的特色与创新之处；}}
-}
+\theoremsymbol{\ensuremath{\square}}
+\newtheorem*{proof}{证明}
+\let\oldproof\proof
+\renewcommand{\proof}{\oldproof\normalfont}
+\theoremstyle{plain}
+\theoremsymbol{}
+% \theoremseparator{：}
+\theorembodyfont{\normalfont}
+% % 定义定理前后的间距
+\theorempreskip{2pt plus 1pt minus 1pt}
+\theorempostskip{2pt plus 1pt minus 1pt}
+\newtheorem{definition}{定义}
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem{corollary}{推论}
+\newtheorem{proposition}{命题}
+\newtheorem{example}{例}
+\newtheorem{remark}{注}
+\newtheorem{problem}{问题}
 
-\newcommand{\makeplan}{
-	{\sihao \color{MsBlue} \templatefont 5．{\bfseries 年度研究计划及预期研究结果}（包括拟组织的重要学术交流活动、国际合作与交流计划等）。}
-}
+% 设置cleveref的中文格式
+\crefname{equation}{式}{式}
+\crefname{figure}{图}{图}
+\crefname{table}{表}{表}
+\crefname{page}{页}{页}
+\crefname{chapter}{章}{章}
+\crefname{section}{节}{节}
+\crefname{appendix}{附录}{附录}
+\crefname{theorem}{定理}{定理}
+\crefname{lemma}{引理}{引理}
+\crefname{corollary}{推论}{推论}
+\crefname{proposition}{命题}{命题}
+\crefname{definition}{定义}{定义}
+\crefname{example}{例}{例}
+% \crefname{algorithm}{算法}{算法}
+\crefname{algocf}{算法}{算法}
+\crefname{listing}{列表}{列表}
+\crefname{line}{行}{行}
+\crefformat{equation}{#2式(#1#3)}
+% \crefformat{figure}{#2图#1#3\xspace}
+% \crefformat{table}{#2表#1#3\xspace}
+% \crefformat{theorem}{#2定理#1#3\xspace}
+% \crefformat{lemma}{#2引理#1#3\xspace}
+% \crefformat{corollary}{#2推论#1#3\xspace}
+% \crefformat{proposition}{#2命题#1#3\xspace}
+% \crefformat{definition}{#2定义#1#3\xspace}
+\crefformat{example}{#2例#1#3\xspace}
+\crefformat{algocf}{#2算法#1#3\xspace}
+\crefformat{chapter}{#2第#1章#3}
+\crefformat{section}{#2第#1节#3}
+\crefformat{subsection}{#2第#1小节#3}
+\crefformat{subsubsection}{#2第#1节#3}
+\crefrangeformat{chapter}{#3第#1章#4至#5第#2章#6}
+\crefrangeformat{section}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsection}{#3第#1节#4至#5第#2节#6}
+\crefrangeformat{subsubsection}{#3第#1节#4至#5第#2节#6}
+\crefmultiformat{chapter}{#2第#1章#3}{和#2第#1章#3}{，#2第#1章#3}{和#2第#1章#3}
+\crefmultiformat{section}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\crefmultiformat{subsubsection}{#2第#1节#3}{和#2第#1节#3}{，#2第#1节#3}{和#2第#1节#3}
+\newcommand{\crefpairconjunction}{~和~}
+\newcommand{\crefmiddleconjunction}{, }
+\newcommand{\creflastconjunction}{~和~}
+\newcommand{\crefpairgroupconjunction}{~和~}
+\newcommand{\crefmiddlegroupconjunction}{, }
+\newcommand{\creflastgroupconjunction}{~和~}
+\newcommand{\crefrangeconjunction}{~至~}
 
-\newcommand{\makeresearchbase}{
-	\vskip -5mm %可以通过类似的命令微调行距以使得排版美观
-	
-	{\color{MsBlue} \subsection{\sihao \templatefont \quad \ （二）研究基础与工作条件 }}
-	
-	{\sihao \color{MsBlue} \templatefont 1．{\bfseries 研究基础}（与本项目相关的研究工作积累和已取得的研究工作成绩）；}
-}
+%%%%%%%%%% table %%%%%%%%%%
+% 表格
 
-\newcommand{\makerequirement}{
-	{\sihao \color{MsBlue} \templatefont 2．{\bfseries 工作条件}（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、国家重点实验室和部门重点实验室等研究基地的计划与落实情况）；}
-}
+% 设置三线表格的上下边为粗实线
+\RequirePackage{booktabs}
 
-\newcommand{\makeongoing}{
-	{\sihao \color{MsBlue} \templatefont 3．{\bfseries 正在承担的与本项目相关的科研项目情况}（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；}
-}
+% 长表格
+\RequirePackage{longtable}
 
-\newcommand{\makecompletion}{
-	{\sihao \color{MsBlue} \templatefont 4．{\bfseries 完成国家自然科学基金项目情况}（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}
-}
+% 表格中的行合并
+\RequirePackage{multirow}
 
-\newcommand{\makeotherprojects}{
-	{\color{MsBlue} \subsection{\sihao \templatefont \quad \ （三）其他需要说明的情况 }}
-	
-	{\sihao \color{MsBlue} \templatefont 1. 申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系）。 }
-}
+% 重定义table/tabular/tabularx环境，使表格内为5号字
+% TODO(huxuan): 支持 longtable
+\let\oldtable\table
+\let\endoldtable\endtable
+\renewenvironment{table}[1][h!]
+{\renewcommand{\arraystretch}{1.5}
+\oldtable[#1]\zihao{5}\songti}
+{\renewcommand{\arraystretch}{1}
+\endoldtable}
 
-\newcommand{\makeapplicantconflict}{
-	{\sihao \color{MsBlue} \templatefont 2. 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。}
-}
+\let\oldtabular\tabular
+\let\endoldtabular\endtabular
+\renewenvironment{tabular}[1][h!]
+{\renewcommand{\arraystretch}{1.5}
+\oldtabular[#1]\zihao{5}}
+{\renewcommand{\arraystretch}{1}
+\endoldtabular}
 
-\newcommand{\makeongoingconflict}{
-	{\sihao \color{MsBlue} \templatefont 3. 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原因。}
-}
+\RequirePackage{tabularx}
+\let\oldtabularx\tabularx
+\let\endoldtabularx\endtabularx
+\renewenvironment{tabularx}[2]
+{\renewcommand{\arraystretch}{1.5}
+\zihao{5}\oldtabularx{#1}{#2}}
+{\renewcommand{\arraystretch}{1}
+\endoldtabularx}
 
-\newcommand{\makeothers}{
-	{\sihao \color{MsBlue} \templatefont 4. 其他。}
+% 修改表内字体为宋体
+\RequirePackage{etoolbox}
+\makeatletter
+\appto\@floatboxreset{%
+  \ifx\@captype\andy@table
+    \songti
+  \fi
 }
+\def\andy@table{table}
+\makeatother
+
+% reduce space before and after proof
+\RequirePackage{xpatch}
+\makeatletter
+\xpatchcmd{\proof}{\topsep6\p@\@plus6\p@\relax}{}{}{}
+\makeatother
+
+\RequirePackage{array}
