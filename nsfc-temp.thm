@@ -1,0 +1,25 @@
+\contentsline {definition}{{定义}{1}{一阶逻辑模型采样问题\upcite {wang_domain-lifted_2019,wang_exact_2023-1,wang_lifted_2024}}}{17}{}%
+\contentsline {definition}{{定义}{2}{文字集合的权重}}{18}{}%
+\contentsline {definition}{{定义}{3}{加权一阶逻辑模型计数问题\upcite {beame_symmetric_2015}}}{18}{}%
+\contentsline {definition}{{定义}{4}{加权一阶逻辑模型采样问题\upcite {wang_lifted_2024,wang_exact_2023-1,wang_domain-lifted_2019}}}{18}{}%
+\contentsline {definition}{{定义}{5}{弱连通多项式}}{19}{}%
+\contentsline {proposition}{{命题}{1}{}}{19}{}%
+\contentsline {definition}{{定义}{6}{强连通多项式}}{21}{}%
+\contentsline {proposition}{{命题}{2}{}}{22}{}%
+\contentsline {problem}{{问题}{1}{承诺前提下的一阶逻辑模型采样问题（PWFOMS）}}{25}{}%
+\contentsline {problem}{{问题}{2}{一阶逻辑的谱问题}}{25}{}%
+\contentsline {proposition}{{命题}{3}{}}{26}{}%
+\contentsline {theorem}{{定理}{1}{}}{26}{}%
+\contentsline {definition}{{定义}{7}{多项式时间归约}}{27}{}%
+\contentsline {definition}{{定义}{8}{$\NP _1$-难问题}}{27}{}%
+\contentsline {lemma}{{引理}{1}{}}{27}{}%
+\contentsline {lemma}{{引理}{2}{}}{28}{}%
+\contentsline {theorem}{{定理}{2}{}}{28}{}%
+\contentsline {theorem}{{定理}{3}{}}{28}{}%
+\contentsline {theorem}{{定理}{4}{}}{29}{}%
+\contentsline {lemma}{{引理}{3}{}}{29}{}%
+\contentsline {theorem}{{定理}{5}{}}{29}{}%
+\contentsline {corollary}{{推论}{1}{}}{29}{}%
+\contentsline {theorem}{{定理}{6}{}}{30}{}%
+\contentsline {lemma}{{引理}{4}{}}{31}{}%
+\contentsline {theorem}{{定理}{7}{}}{31}{}%
