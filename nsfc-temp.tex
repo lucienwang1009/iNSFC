@@ -153,7 +153,7 @@
 \begin{document}
 \begin{center}
 {\sanhao \kaishu \bfseries 报告正文 
-\par 一阶逻辑约束的结构数据生成关键技术研究}
+\par 一阶逻辑约束的结构数据生成}
 \end{center}
 
 {\sihao \kaishu 参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。{\color{MsBlue} \bfseries 请勿删除或改动下述提纲标题及括号中的文字。}}
@@ -167,29 +167,37 @@
 % 1.1 研究意义
 \subsection{1.1 研究意义}
 
-随着人工智能技术的迅速发展，数据生成问题日益受到研究者的广泛关注\upcite{王坤峰2017生成式对抗网络,胡铭菲2022深度生成模型综述,harshvardhan2020comprehensive}。
-数据生成问题是指根据给定的数据分布，生成符合该分布的数据，在计算机的许多领域，包括自然语言处理\upcite{DBLP:conf/naacl/DevlinCLT19}、计算机视觉\upcite{creswell2018generative,ho2020denoising}、生物信息学\upcite{guo2024diffusion}、网络可靠性分析\upcite{duenas2017counting}、程序的随机测试\upcite{hutchison_scalable_2013,chakraborty_parallel_2015,soos_tinted_2020}等均有广泛应用。
-在众多数据生成问题中，结构数据因其在现实世界和计算机科学中的普遍性，成为研究的重点之一\upcite{guo2022systematic,codd1970relational,dvzeroski2010relational}。
-% 结构数据是指数据元素间存在严格约束的数据，并且这些约束能够通过形式化语言进行描述\upcite{codd1970relational,dvzeroski2010relational}。
-此类问题的主要挑战在于：\emph{生成的结构数据不仅要满足特定的分布，还要严格满足数据元素间的结构约束}。
-例如，生成化学分子结构时，原子间的化学键必须遵守化学规则\upcite{samanta_nevae_2019}；生成表格数据时，必须满足表格中列与列之间的关联性\upcite{hernandez2022synthetic}；生成程序测试用例时，必须符合程序的语法规则\upcite{hutchison_scalable_2013,chakraborty_parallel_2015,soos_tinted_2020}；生成网络拓扑结构时，必须保证网络拓扑中网络节点之间的连接关系\upcite{laurito2017topogen}。
+随着人工智能技术的迅速发展，数据生成问题日益受到研究者的广泛关注\upcite{胡铭菲2022深度生成模型综述,harshvardhan2020comprehensive}。
+在众多数据生成的问题中，由于结构数据在现实世界与计算机科学领域的广泛存在，其生成技术可广泛应用于生物信息学\upcite{guo2024diffusion,vignac2023digress}、网络可靠性分析\upcite{duenas2017counting}、代码自动化测试\upcite{chakraborty_parallel_2015,soos_tinted_2020}以及机器学习模型的评估\upcite{yoon2023graph}等领域，具有重要的理论意义和应用价值，已逐渐成为研究的重点之一\upcite{guo2022systematic}。
+% 成为研究的重点之一\upcite{guo2022systematic,codd1970relational}。
+结构数据生成是指根据给定的数据分布，生成符合该分布且严格满足元素间结构约束的数据。
+鉴于结构数据生成问题中的约束往往呈现出量化规律性，采用\emph{一阶逻辑}来描述这些结构约束显得尤为自然。
+同时，在结构数据推理领域，一阶逻辑凭借其表达的简洁性、普适性，以及对高效求解算法的固有支持，已成为解决该类问题的标准范式之一\upcite{richardson_markov_2006,de_raedt_problog_2007,van_den_broeck_lifted_2011,van_den_broeck_lifted_2015,marra_neural_2021,van_bremen_lifted_2021,toth_lifted_2022}。
+因此，\emph{开展一阶逻辑约束的结构数据生成研究，对于构筑系统化、一体化的理论架构，驱动结构数据高效生成技术的革新与进步，以及催化相关应用领域实现跨越式发展，具有至关重要的战略意义与深远价值。}
 
-针对具有严格约束的结构数据生成问题，目前普遍采用的解决方法包括：基于拒绝采样的生成方法（先生成非严格满足约束的数据，再从中筛选出符合约束的数据）\upcite{you2018graphrnn,bacciu2020edge,das2021accelerated,zang2020moflow,de2018molgan,fan2019conditional,popova2019molecularrnn}；基于人工硬编码的生成方法（在数据生成的过程中通过人工编写算法对输出进行约束\upcite{guo2020property,du2022interpretable,du2021deep,liu_constrained_2019,samanta_nevae_2019,Jin_Barzilay_Jaakkola_2018,fu2021mimosa,jin2020hierarchical,luo_graphdf_2021}；以及基于逻辑约束的生成方法（将结构约束建模为逻辑公式，通过求解可满足问题来生成符合约束的数据）\upcite{kusner2017grammar,dai2018syntax,kajino2019molecular,feng_sampling_2021,sharma2018knowledge,amarilli_et_al:LIPIcs.ICALP.2017.111,milch_general-purpose_2006,niepert_markov_2012,holtzen_generating_2019}。
-其中，基于逻辑约束的生成方法因其出色的可扩展性和普适性，一直受到研究者的广泛关注\upcite{chakraborty_parallel_2015,feng_fast_2020,soos_arjun_2022}。
-基于逻辑约束的生成方法又被称作\emph{模型采样问题}（Model Sampling Problem），其目标是给定描述数据结构的逻辑式及布尔变量的权重，依权重生成符合该逻辑式的数据（即对布尔变量的赋值，又称逻辑式的模型）。
+基于一阶逻辑约束的结构数据生成问题又称作\emph{模型采样问题}，其目标是给定描述数据结构的逻辑式及布尔变量的权重，依权重生成符合该逻辑式的数据（即对布尔变量的赋值，又称逻辑式的模型）。例如，化学分子生成问题中原子间的价键约束可以用计数量词$\forall x\exists_{=2} y: bond(x,y)$来描述，表示对于任意一个原子$x$，有且仅有两个原子$y$与之形成化学键；网络仿真任务中，使用$\forall x: connected(x, Hub)$来描述网络中所有节点$x$与中心节点$Hub$相连（即星型拓扑结构）；代码自动化测试中，使用$\forall x: if(x) \rightarrow \exists y: then(y)\land after(y,x)$来描述程序中所有的if语句$x$都必须有对应的then语句。
+
+% 可抽象为一个加权一阶逻辑模型（注意此处为布尔变量的赋值）采样（Weighted First-Order Model Sampling, WFOMS）问题。
+% 结构数据是指数据元素间存在严格约束的数据，并且这些约束能够通过形式化语言进行描述\upcite{codd1970relational,dvzeroski2010relational}。
+% 此类问题的主要挑战在于：\emph{生成的结构数据不仅要满足特定的分布，还要}。
+% 例如，生成化学分子结构时，原子间的化学键必须遵守化学规则\upcite{samanta_nevae_2019}；生成表格数据时，必须满足表格中列与列之间的关联性\upcite{hernandez2022synthetic}；生成程序测试用例时，必须符合程序的语法规则\upcite{hutchison_scalable_2013,chakraborty_parallel_2015,soos_tinted_2020}；生成网络拓扑结构时，必须保证网络拓扑中网络节点之间的连接关系\upcite{laurito2017topogen}。
+
+% 针对具有严格约束的结构数据生成问题，目前普遍采用的解决方法包括：基于拒绝采样的生成方法（先生成非严格满足约束的数据，再从中筛选出符合约束的数据）\upcite{you2018graphrnn,bacciu2020edge,das2021accelerated,zang2020moflow,de2018molgan,fan2019conditional,popova2019molecularrnn}；基于人工硬编码的生成方法（在数据生成的过程中通过人工编写算法对输出进行约束\upcite{guo2020property,du2022interpretable,du2021deep,liu_constrained_2019,samanta_nevae_2019,Jin_Barzilay_Jaakkola_2018,fu2021mimosa,jin2020hierarchical,luo_graphdf_2021}；以及基于逻辑约束的生成方法（将结构约束建模为逻辑公式，通过求解可满足问题来生成符合约束的数据）\upcite{kusner2017grammar,dai2018syntax,kajino2019molecular,feng_sampling_2021,sharma2018knowledge,amarilli_et_al:LIPIcs.ICALP.2017.111,milch_general-purpose_2006,niepert_markov_2012,holtzen_generating_2019}。
+% 其中，基于逻辑约束的生成方法因其出色的可扩展性和普适性，一直受到研究者的广泛关注\upcite{chakraborty_parallel_2015,feng_fast_2020,soos_arjun_2022}。
+% 基于逻辑约束的生成方法又被称作\emph{模型采样问题}（Model Sampling Problem），其目标是给定描述数据结构的逻辑式及布尔变量的权重，依权重生成符合该逻辑式的数据（即对布尔变量的赋值，又称逻辑式的模型）。
 % \emph{布尔可满足性问题（Boolean Satisfiability Problem，\SAT）}是\CSP{}问题中重要的一个子类，其目标是给定一个命题逻辑公式，判断是否存在一组布尔变量的赋值，使得该公式成立。
 % 利用\CSP{}及\SAT{}问题的求解算法，可以将结构约束建模为一组变量上的约束或命题逻辑公式，然后通过求解\CSP{}或\SAT{}问题来得到符合结构约束的数据；而生成符合给定分布的数据，则可以通过采样加权\CSP{}或\SAT{}问题的解来实现。
 % 在理论上，此类方法面临的一个主要挑战是，模型采样问题是\NP{}-难的（\NP-$\mathsf{Hard}$），人们普遍认为不存在多项式时间算法可以解决这类问题\upcite{valiant_complexity_1979,schaefer1978complexity}。
 % 应对这一挑战的主要思路包括设计高效的近似算法\upcite{chakraborty_scalable_2013,soos_tinted_2020}，或者考虑满足特定性质的约束（例如满足Lovász局部引理的约束\upcite{erdos1975problems,feng_sampling_2021}）。
 
-鉴于结构数据生成问题中的结构约束普遍具有量化规律性，使用\emph{一阶逻辑}（First-Order Logic，FOL）来描述结构约束是一种更为自然的方法。
-例如，化学分子生成问题中原子间的价键约束可以用计数量词$\forall x\exists_{=2} y: bond(x,y)$来描述，表示对于任意一个原子$x$，有且仅有两个原子$y$与之形成化学键；网络仿真任务中，使用$\forall x: connected(x, Hub)$来描述网络中所有节点$x$与中心节点$Hub$相连（即星型拓扑结构）。
-并且，一阶逻辑在结构数据的推理问题，尤其是概率推理（Probabilistic Reasoning）问题中的应用已相当广泛\upcite{richardson_markov_2006,de_raedt_problog_2007,van_den_broeck_lifted_2011,van_den_broeck_lifted_2015,marra_neural_2021,van_bremen_lifted_2021,toth_lifted_2022}，其理论和算法研究取得了显著进展，为一阶逻辑在结构数据生成问题中的应用奠定了坚实的基础。
+% 鉴于结构数据生成问题中的结构约束普遍具有量化规律性，使用\emph{一阶逻辑}（First-Order Logic，FOL）来描述结构约束是一种更为自然的方法。
+% 例如，化学分子生成问题中原子间的价键约束可以用计数量词$\forall x\exists_{=2} y: bond(x,y)$来描述，表示对于任意一个原子$x$，有且仅有两个原子$y$与之形成化学键；网络仿真任务中，使用$\forall x: connected(x, Hub)$来描述网络中所有节点$x$与中心节点$Hub$相连（即星型拓扑结构）。
+% 并且，一阶逻辑在结构数据的推理问题，尤其是概率推理（Probabilistic Reasoning）问题中的应用已相当广泛\upcite{richardson_markov_2006,de_raedt_problog_2007,van_den_broeck_lifted_2011,van_den_broeck_lifted_2015,marra_neural_2021,van_bremen_lifted_2021,toth_lifted_2022}，其理论和算法研究取得了显著进展，为一阶逻辑在结构数据生成问题中的应用奠定了坚实的基础。
 
-对一阶逻辑模型采样问题的研究在过去十几年中取得了一些进展\upcite{niepert_lifted_2012,niepert_markov_2012,holtzen_generating_2019,den_broeck_and_mathias_niepert_lifted_2015,gogate_advances_2012}，但一直缺乏系统的理论框架和高效的解决方案，许多问题仍待解决。
+对一阶逻辑模型采样问题的研究在过去十几年中取得了一些进展\upcite{niepert_lifted_2012,niepert_markov_2012,holtzen_generating_2019,den_broeck_and_mathias_niepert_lifted_2015,gogate_advances_2012}，但一直缺乏系统的理论框架和高效的解决方案。
 近年来，项目申请人通过构建一套一阶逻辑模型采样问题的统一框架，尝试对这些关键问题进行深入研究，并得到了一些初步的研究成果\upcite{wang_domain-lifted_2019,wang_exact_2023-1,wang_lifted_2024}。
-其中最重要的结论是，若结构数据中的结构约束可以被只包含两个逻辑变量的一阶逻辑公式表示，那么该数据上的采样问题可以在多项式时间内求解。
-虽然该结论在一定程度上，揭示了一阶逻辑模型采样问题的复杂度特征，但仍存在许多重要问题亟待解决：
+% 其中最重要的结论是，若结构数据中的结构约束可以被只包含两个逻辑变量的一阶逻辑公式表示，那么该数据上的采样问题可以在多项式时间内求解。
+然而，虽然这些结论在一定程度上，揭示了一阶逻辑模型采样问题的复杂度特征，但仍存在许多重要问题亟待解决：
 \begin{itemize}
   \item 现有结论只考虑了数据的结构约束能由一阶逻辑式完全表示的情况，而在实际应用中，结构约束往往是复杂的，甚至\emph{无法被一阶逻辑有限公理化}（FOL-Finite Axiomatization，即无法用有限长度的一阶逻辑式描述），例如拓扑图的有向无环约束、程序测试数据的线性序列约束等。在该情况下，一阶逻辑模型采样问题的复杂度如何？是否存在一种通用的方法，可以容易地将现有的采样算法扩展到这种情况？
   \item 现有结论只证明了一阶逻辑模型采样问题的多项式时间可解性，但并未给对采样问题的\emph{难解性}进行深入分析。在什么情况下，一阶逻辑模型采样问题不存在多项式时间算法？这对于进一步理解一阶逻辑模型采样问题的复杂度特征至关重要！
@@ -316,7 +324,8 @@ WFOMS问题中的对称性指的是一阶逻辑式的模型具有常量置换不
 
 \emph{综上所述，面向结构数据生成的一阶逻辑模型采样问题虽取得了一定的研究进展，但仍存在诸多问题亟待解决。}
 \begin{enumerate}
-  \item \emph{非有限公理化结构约束下的一阶逻辑模型采样问题}：如何设计支持非有限公理化结构约束的一阶逻辑模型采样算法，是否存在一个类似于图多项式的通用方法，可支持包括树公理约束、无环公理约束、强连通性公理约束等复杂结构约束的一阶逻辑模型采样问题？
+  \item \emph{模型采样算法中非有限公理化结构约束的建模不通用：}：尽管已有的WFOMS算法可以处理树公理约束，但对于更复杂的非有限公理化结构约束，现有的WFOMS算法仍然无法处理。
+  如何设计支持非有限公理化结构约束的一阶逻辑模型采样算法，是否存在一个类似于图多项式的通用方法，可支持包括树公理约束、无环公理约束、强连通性公理约束等复杂结构约束的一阶逻辑模型采样问题？
   \item \emph{一阶逻辑模型采样问题的难解性分析}：是否所有的一阶逻辑模型采样问题都存在多项式时间算法？如何对一阶逻辑模型采样问题的难解性进行刻画，一阶逻辑片段层面，WFOMS问题的难解性是否存在相变点？
   \item \emph{一阶逻辑模型采样问题的近似算法设计}：如何在一阶逻辑模型采样问题中充分利用对称性信息？是否可以将多项式时间精确采样算法的设计思想应用到近似采样算法设计中？
 \end{enumerate}
@@ -460,19 +469,17 @@ WFOMS问题中的对称性指的是一阶逻辑式的模型具有常量置换不
 
 本项目关注纯关系（Pure Relation）的一阶逻辑，即不包含函数符号。
 该类一阶逻辑包含一个无限的逻辑变量符号集合和一个有限的谓词符号集合。
-谓词的元数表示该谓词的参数个数，一般将一个谓词记作$P/k$，其中$P$是谓词的名称，$k$是谓词的元数。
-如果$R$是一个元数为$k$的谓词符号，$x_1,\dots,x_k$是$k$个逻辑变量，则$R(x_1,\dots,x_k)$是一个原子式。
-一阶逻辑中的文字定义为一个原子式或其否定。
-一阶逻辑式可以是一个文字（Literal），或者两个一阶逻辑式的合取或析取。
-除此之外，一阶逻辑还允许使用全称量词$\forall$和存在量词$\exists$，对逻辑变量进行约束，被量词约束的一阶逻辑式仍然是一个一阶逻辑式。
-无自由变量的一阶逻辑式，被称作一阶逻辑语句。
-给定一组谓词$\mathcal{P}$，一个$\mathcal{P}$-结构为一个元组$(\domain, \mathcal{I})$，其中$\domain$是一个非空常量集合，称为域（Domain），$\mathcal{I}$是一个函数，将$\mathcal{P}$中的每个谓词符号$P_i/k_i$映射到$\domain^{k_i}$的一个子集，代表$P_i$为真的赋值；$\mathcal{I}(P_i)$称为$P_i$的解释（Interpretation）。
-将一阶逻辑式$\formula$中的谓词集合记作$\mathcal{P}_\formula$，则$\formula$的结构定义为一个$\mathcal{P}_\formula$-结构。
-一个结构$\structure=(\domain, \mathcal{I})$满足包含全称量词的一阶逻辑式$\forall x: \phi(x)$，当且仅当将$\phi(x)$中的自由变量$x$替换为$\domain$中的任意常量后，$\structure$满足替换后的一阶逻辑式；结构$\structure$满足包含存在量词的一阶逻辑式$\exists x: \phi(x)$，当且仅当存在$\domain$中的某个常量，将$\phi(x)$中的自由变量$x$替换为该常量后，$\structure$满足替换后的一阶逻辑式。
-若结构$\structure$满足一阶逻辑式$\formula$，则称$\structure$是$\formula$的一个模型，表示为$\structure\models\formula$。
+% 谓词的元数表示该谓词的参数个数，一般将一个谓词记作$P/k$，其中$P$是谓词的名称，$k$是谓词的元数。
+% 如果$R$是一个元数为$k$的谓词符号，$x_1,\dots,x_k$是$k$个逻辑变量，则$R(x_1,\dots,x_k)$是一个原子式。
+% 一阶逻辑中的文字定义为一个原子式或其否定。
+% 一阶逻辑式可以是一个文字（Literal），或者两个一阶逻辑式的合取或析取。
+% 除此之外，一阶逻辑还允许使用全称量词$\forall$和存在量词$\exists$，对逻辑变量进行约束，被量词约束的一阶逻辑式仍然是一个一阶逻辑式。
+% 无自由变量的一阶逻辑式，被称作一阶逻辑语句。
+% 给定一组谓词$\mathcal{P}$，一个$\mathcal{P}$-结构为一个元组$(\domain, \mathcal{I})$，其中$\domain$是一个非空常量集合，称为域（Domain），$\mathcal{I}$是一个函数，将$\mathcal{P}$中的每个谓词符号$P_i/k_i$映射到$\domain^{k_i}$的一个子集，代表$P_i$为真的赋值；$\mathcal{I}(P_i)$称为$P_i$的解释（Interpretation）。
+% 将一阶逻辑式$\formula$中的谓词集合记作$\mathcal{P}_\formula$，则$\formula$的结构定义为一个$\mathcal{P}_\formula$-结构。
+% 一个结构$\structure=(\domain, \mathcal{I})$满足包含全称量词的一阶逻辑式$\forall x: \phi(x)$，当且仅当将$\phi(x)$中的自由变量$x$替换为$\domain$中的任意常量后，$\structure$满足替换后的一阶逻辑式；结构$\structure$满足包含存在量词的一阶逻辑式$\exists x: \phi(x)$，当且仅当存在$\domain$中的某个常量，将$\phi(x)$中的自由变量$x$替换为该常量后，$\structure$满足替换后的一阶逻辑式。
+% 若结构$\structure$满足一阶逻辑式$\formula$，则称$\structure$是$\formula$的一个模型，表示为$\structure\models\formula$。
 给定一个一阶逻辑式$\formula$和一个域$\domain$，使用$\fomodels{\formula}{\domain}$表示$\formula$在$\domain$上的所有模型的集合。
-
-
 一阶逻辑模型计数问题的目标是计算$\fomodels{\formula}{\domain}$的大小，即$\sentence$在$\domain$上的模型个数；一阶逻辑模型采样问题则从$\fomodels{\formula}{\domain}$中均匀随机采样一个模型。
 
 \begin{definition}[一阶逻辑模型采样问题\upcite{wang_domain-lifted_2019,wang_exact_2023-1,wang_lifted_2024}]
@@ -583,17 +590,16 @@ WFOMS问题中的对称性指的是一阶逻辑式的模型具有常量置换不
 \end{align*}
 上式中每个模型的权重需要乘以$(\frac{1}{2})^{cc(\mu_R)}$，因为对于二部图中的每个连通分量，$P_1$和$P_2$可以交换位置，从而导致了重复计数。
 
-利用弱连通多项式$f_n(u)$，不仅可以对于严格的公理约束进行建模，还可以建模更为复杂的软约束。例如，在一个社交网络中，可以通过$G(friends)$中的连通分量的数量来表示紧密度，即连通分量的数量越少，网络越紧密。
-在这种情况下，可以将一个实数$d$用来表示紧密度：$d$越大，网络越紧密，即$G(friends)$中的连通分量数量越少。
-这可以通过定义模型$\mu$的权重为$\typeweight{\mu}\cdot \exp(-d\cdot cc(\mu_{friends}))$来实现，
-那么社交网络的生成问题即对应着$f_n(\exp(-d) - 1; \sentence, \weight, \negweight, friends)$上的模型采样问题。
+% 利用弱连通多项式$f_n(u)$，不仅可以对于严格的公理约束进行建模，还可以建模更为复杂的软约束。例如，在一个社交网络中，可以通过$G(friends)$中的连通分量的数量来表示紧密度，即连通分量的数量越少，网络越紧密。
+% 在这种情况下，可以将一个实数$d$用来表示紧密度：$d$越大，网络越紧密，即$G(friends)$中的连通分量数量越少。
+% 这可以通过定义模型$\mu$的权重为$\typeweight{\mu}\cdot \exp(-d\cdot cc(\mu_{friends}))$来实现，
+% 那么社交网络的生成问题即对应着$f_n(\exp(-d) - 1; \sentence, \weight, \negweight, friends)$上的模型采样问题。
 
 \subsubsubsection{（3）基于有向染色多项式的强连通公理约束统一建模}
 
 该部分拟基于有向染色多项式（Directed Chromatic Polynomial）的概念，对强连通公理约束，例如强连通分量公理约束、无环公理约束等，进行统一建模。
 % 有向染色也是图论中的一个重要概念，它是有向图的一个不变量，可以用来描述有向图的各种性质。
 % 给定一个有向图$D=(V,E)$，其中$V$是顶点集合，$E$是边集合。
-
 使用$\chi_D(x)$表示有向图$D$的严格有向染色多项式（Strict Directed Chromatic Polynomial），定义为将$V$中的顶点用$\{1, 2, \dots, x\}$中的颜色染色，使得如果有一条从$u$到$v$的边，则$u$的颜色\emph{小于}$v$的颜色的染色方案的数量。
 易知$\chi_D(x)$是一个关于$x$的多项式，且$\chi_D(x)$的次数为$|V|$。
 类似地，使用$\bar \chi_D(x)$表示有向图$D$的非严格有向染色多项式（Non-Strict Directed Chromatic Polynomial），定义为将$V$中的顶点用$\{1, 2, \dots, x\}$中的颜色染色，使得如果有一条从$u$到$v$的边，则$u$的颜色\emph{小于等于}$v$的颜色的染色方案的数量。
